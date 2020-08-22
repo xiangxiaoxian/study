@@ -19,4 +19,10 @@ public interface UserSerivce {
     Result<User> login(User user);
 
     PageInfo<User> selectUsersBySearchVo(SearchVo searchVo);
+
+    Result<User> updateUser(User user);
+
+    Result<Object> deleteUser(int userId);
+
+    User selectUserByUserId(int userId);
 }

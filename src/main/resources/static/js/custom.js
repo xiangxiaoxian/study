@@ -5036,4 +5036,43 @@ $(document).ready(function () {
     init_autosize();
     init_autocomplete();
 
-});	
+});
+
+
+/*--------------------------*/
+/*==================================================================*/
+function initRoles(rolesDivId, roleElementName) {
+    $.ajax({
+        url : "/api/roles",
+        type : "get",
+        success : function (rs) {
+            var rolesDiv = $("#" + rolesDivId);
+            rolesDiv.empty();
+            $.each(rs, function(i, item) {
+                rolesDiv.append("<input type='checkbox' name='" + roleElementName
+                    + "' value='"+ item.roleId + "'/>" + item.roleName + " ");
+            });
+        },
+        error : function (data) {
+            layer.alert(data.responseText, {icon: 0});
+        }
+    });
+}
+
+function initResources(resourcesDivId, resourceElementName) {
+    $.ajax({
+        url : "/api/resources",
+        type : "get",
+        success : function (rs) {
+            var resourcesDiv = $("#" + resourcesDivId);
+            resourcesDiv.empty();
+            $.each(rs, function(i, item) {
+                resourcesDiv.append("<input type='checkbox' name='" + resourceElementName
+                    + "' value='"+ item.resourceId + "'/>" + item.resourceName + " ");
+            });
+        },
+        error : function (data) {
+            layer.alert(data.responseText, {icon: 0});
+        }
+    });
+}
