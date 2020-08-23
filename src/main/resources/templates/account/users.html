@@ -222,32 +222,40 @@
         var user = {};
         user.userName = $("#userNameForAddPage").val();
         user.password = $("#passwordForAddPage").val();
-        var roles = new Array();
-        $.each($("input[name='roleElementForAdd']"), function(){
-            if(this.checked){
-                var role = {};
-                role.roleId = $(this).val();
-                roles.push(role);
-            }
-        });
-        user.roles = roles;
-
-        $.ajax({
-            url : "/api/user",
-            type : "post",
-            contentType: "application/json",
-            data : JSON.stringify(user),
-            success : function (rs) {
-                if (rs.status == 200) {
-                    initUserTable(DEFAULT_PAGE_SIZE);
-                } else {
-                    layer.alert(rs.messgae, {icon: 0});
+        if (user.userName==""){
+            alert("请输入用户名");
+            return false;
+        }else if (user.password==""){
+            alert("请输入密码");
+            return false;
+        }else {
+            var roles = new Array();
+            $.each($("input[name='roleElementForAdd']"), function () {
+                if (this.checked) {
+                    var role = {};
+                    role.roleId = $(this).val();
+                    roles.push(role);
                 }
-            },
-            error : function (data) {
-                layer.alert(data.responseText, {icon: 0});
-            }
-        });
+            });
+            user.roles = roles;
+            $.ajax({
+                url: "/api/user",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                success: function (rs) {
+                    if (rs.status == 200) {
+                        initUserTable(DEFAULT_PAGE_SIZE);
+                    } else {
+                        layer.alert(rs.message, {icon: 0});
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, {icon: 0});
+                }
+            });
+        }
+
     }
 
     function initEditModal(userId) {

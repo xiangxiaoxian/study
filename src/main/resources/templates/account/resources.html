@@ -206,23 +206,33 @@
         resource.resourceName = $("#resourceNameForAddPage").val();
         resource.resourceUri = $("#resourceUriForAddPage").val();
         resource.permission = $("#permissionForAddPage").val();
-
-        $.ajax({
-            url : "/api/resource",
-            type : "post",
-            contentType: "application/json",
-            data : JSON.stringify(resource),
-            success : function (rs) {
-                if (rs.status == 200) {
-                    initResourceTable(DEFAULT_PAGE_SIZE);
-                } else {
-                    layer.alert(rs.message, {icon: 0});
+        if (resource.resourceName==""){
+            alert("请输入resourceName");
+            return false;
+        }else if (resource.resourceUri==""){
+            alert("请输入resourceUri");
+            return false;
+        }else if (resource.permission==""){
+            alert("请输入permission");
+            return false;
+        }else {
+            $.ajax({
+                url: "/api/resource",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(resource),
+                success: function (rs) {
+                    if (rs.status == 200) {
+                        initResourceTable(DEFAULT_PAGE_SIZE);
+                    } else {
+                        layer.alert(rs.message, {icon: 0});
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, {icon: 0});
                 }
-            },
-            error : function (data) {
-                layer.alert(data.responseText, {icon: 0});
-            }
-        });
+            });
+        }
     }
 
     function initEditModal(resourceId) {

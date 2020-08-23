@@ -212,32 +212,37 @@
     function addRole() {
         var role = {};
         role.roleName = $("#roleNameForAddPage").val();
-        var resources = new Array();
-        $.each($("input[name='resourceElementForAdd']"), function(){
-            if(this.checked){
-                var resource = {};
-                resource.resourceId = $(this).val();
-                resources.push(resource);
-            }
-        });
-        role.resources = resources;
-
-        $.ajax({
-            url : "/api/role",
-            type : "post",
-            contentType: "application/json",
-            data : JSON.stringify(role),
-            success : function (rs) {
-                if (rs.status == 200) {
-                    initRoleTable(DEFAULT_PAGE_SIZE);
-                } else {
-                    layer.alert(rs.messgae, {icon: 0});
+        if (role.roleName==""){
+            alert("请输入roleName");
+            return false;
+        }else {
+            var resources = new Array();
+            $.each($("input[name='resourceElementForAdd']"), function () {
+                if (this.checked) {
+                    var resource = {};
+                    resource.resourceId = $(this).val();
+                    resources.push(resource);
                 }
-            },
-            error : function (data) {
-                layer.alert(data.responseText, {icon: 0});
-            }
-        });
+            });
+            role.resources = resources;
+
+            $.ajax({
+                url: "/api/role",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(role),
+                success: function (rs) {
+                    if (rs.status == 200) {
+                        initRoleTable(DEFAULT_PAGE_SIZE);
+                    } else {
+                        layer.alert(rs.messgae, {icon: 0});
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, {icon: 0});
+                }
+            });
+        }
     }
 
     function initEditModal(roleId) {
