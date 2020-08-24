@@ -8,6 +8,7 @@ import com.xiang.springboot01.modules.common.vo.SearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 
@@ -80,4 +81,22 @@ public class UserController {
     public User selectUserByUserId(@PathVariable int userId) {
         return userSerivce.selectUserByUserId(userId);
     }
+
+
+    /*
+    * 127.0.0.1/api/userImg
+    * */
+    @PostMapping(value = "/userImg",consumes = "multipart/form-data")
+    public Result<String> uploadUserImg(@RequestParam MultipartFile file) {
+        return userSerivce.uploadUserImg(file);
+    }
+
+    /*
+    * 127.0.0.1/api/profile   ---put
+    * */
+    @PutMapping(value = "/profile",consumes = "application/json")
+    public Result<User> updateUserProfile(@RequestBody User user) {
+        return userSerivce.updateUserProfile(user);
+    }
+
 }

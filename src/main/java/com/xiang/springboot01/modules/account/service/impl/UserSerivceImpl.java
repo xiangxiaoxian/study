@@ -2,6 +2,7 @@ package com.xiang.springboot01.modules.account.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xiang.springboot01.config.ResourceConfigBean;
 import com.xiang.springboot01.modules.account.dao.UserDao;
 import com.xiang.springboot01.modules.account.dao.UserRoleDao;
 import com.xiang.springboot01.modules.account.entity.Role;
@@ -13,7 +14,10 @@ import com.xiang.springboot01.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +37,9 @@ public class UserSerivceImpl implements UserSerivce {
 
    @Autowired
    private UserRoleDao userRoleDao;
+
+   @Autowired
+   private ResourceConfigBean resourceConfigBean;
 
 
     @Override
@@ -108,5 +115,49 @@ public class UserSerivceImpl implements UserSerivce {
     @Override
     public User selectUserByUserId(int userId) {
         return userDao.selectUserByUserId(userId);
+    }
+
+    @Override
+    public Result<String> uploadUserImg(MultipartFile file) {
+        if (file.isEmpty()) {
+            return new Result<String>(
+                    Result.ResultStatus.FAILD.status, "Please select img.");
+        }
+
+        String relativePath = "";
+        String destFilePath = "";
+        try {
+            String osName = System.getProperty("os.name");
+            if (osName.toLowerCase().startsWith("win")) {
+                destFilePath = resourceConfigBean.getLocationPathForWindows() +
+                        file.getOriginalFilename();
+            } else {
+                destFilePath = resourceConfigBean.getLocationPathForLinux()
+                        + file.getOriginalFilename();
+            }
+            relativePath = resourceConfigBean.getRelativePath() +
+                    file.getOriginalFilename();
+            File destFile = new File(destFilePath);
+            file.transferTo(destFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Result<String>(
+                    Result.ResultStatus.FAILD.status, "Upload failed.");
+        }
+
+        return new Result<String>(
+                Result.ResultStatus.SUCCESS.status, "Upload success.", relativePath);
+    }
+
+    @Override
+    @Transactional
+    public Result<User> updateUserProfile(User user) {
+        User userTemp=userDao.selectUserByUserName(user.getUserName());
+        if (userTemp!=null && userTemp.getUserId()!=user.getUserId()){
+            return new Result<User>(Result.ResultStatus.FAILD.status,"user name is repeat");
+        }
+        userDao.updateUser(user);
+        return new Result<User>(Result.ResultStatus.SUCCESS.status,"update success",user);
     }
 }

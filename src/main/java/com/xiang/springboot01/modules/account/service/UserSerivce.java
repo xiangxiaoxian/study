@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xiang.springboot01.modules.account.entity.User;
 import com.xiang.springboot01.modules.common.vo.Result;
 import com.xiang.springboot01.modules.common.vo.SearchVo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author admin
@@ -25,4 +26,8 @@ public interface UserSerivce {
     Result<Object> deleteUser(int userId);
 
     User selectUserByUserId(int userId);
+
+    Result<String> uploadUserImg(MultipartFile file);
+
+    Result<User> updateUserProfile(User user);
 }

@@ -17,6 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AccountController {
 
     /*
+     * 127.0.0.1/account/profile  ---get
+     * */
+    @GetMapping("/profile")
+    public String profilePage(){
+        return "index";
+    }
+
+    /*
     * 127.0.0.1/account/users  ---get
     * */
     @GetMapping("/users")
@@ -53,6 +61,14 @@ public class AccountController {
      * */
     @GetMapping("/register")
     public String registerPage(){
+        return "indexSimple";
+    }
+
+    /**
+     * 127.0.0.1/account/registerVue ---- get
+     */
+    @GetMapping("/registerVue")
+    public String registerVuePage() {
         return "indexSimple";
     }
 }
