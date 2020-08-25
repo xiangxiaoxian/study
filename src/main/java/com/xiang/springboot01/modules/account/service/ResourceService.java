@@ -27,4 +27,6 @@ public interface ResourceService {
     Result<Object> deleteResource(int resourceId);
 
     Resource selectResourceByResourceId(int resourceId);
+
+    List<Resource> getResourcesByRoleId(int roleId);
 }

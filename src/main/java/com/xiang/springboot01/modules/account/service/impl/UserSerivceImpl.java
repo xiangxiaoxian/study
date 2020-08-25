@@ -11,6 +11,11 @@ import com.xiang.springboot01.modules.account.service.UserSerivce;
 import com.xiang.springboot01.modules.common.vo.Result;
 import com.xiang.springboot01.modules.common.vo.SearchVo;
 import com.xiang.springboot01.utils.MD5Util;
+import org.apache.catalina.security.SecurityUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,11 +72,18 @@ public class UserSerivceImpl implements UserSerivce {
 
     @Override
     public  Result<User> login(User user) {
-        User userTemp=userDao.selectUserByUserName(user.getUserName());
-        if (userTemp!=null && userTemp.getPassword().equals(MD5Util.getMD5(user.getPassword()))){
-            return  new Result<User>(Result.ResultStatus.SUCCESS.status,"login success",userTemp);
+        Subject subject= SecurityUtils.getSubject();
+        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(user.getUserName(),MD5Util.getMD5(user.getPassword()));
+        try {
+            subject.login(usernamePasswordToken);
+            subject.checkRoles();
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<User>(Result.ResultStatus.FAILD.status,"Username or password error");
         }
-        return new Result<User>(Result.ResultStatus.FAILD.status,"Username or password error");
+        Session session = subject.getSession();
+        session.setAttribute("user",(User)subject.getPrincipal());
+        return  new Result<User>(Result.ResultStatus.SUCCESS.status,"login success",user);
     }
 
     @Override
@@ -159,5 +171,18 @@ public class UserSerivceImpl implements UserSerivce {
         }
         userDao.updateUser(user);
         return new Result<User>(Result.ResultStatus.SUCCESS.status,"update success",user);
+    }
+
+    @Override
+    public User selectUserByUserName(String userName) {
+        return userDao.selectUserByUserName(userName);
+    }
+
+    @Override
+    public void logout() {
+        Subject subject= SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        session.setAttribute("user",null);
     }
 }

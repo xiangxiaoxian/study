@@ -80,4 +80,9 @@ public class ResourceServiceImpl implements ResourceService {
     public Resource selectResourceByResourceId(int resourceId) {
         return resourceDao.selectResourceByResourceId(resourceId);
     }
+
+    @Override
+    public List<Resource> getResourcesByRoleId(int roleId) {
+        return resourceDao.getResourcesByRoleId(roleId);
+    }
 }
