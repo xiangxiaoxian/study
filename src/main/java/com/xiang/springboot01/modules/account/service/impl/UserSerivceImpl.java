@@ -73,7 +73,7 @@ public class UserSerivceImpl implements UserSerivce {
     @Override
     public  Result<User> login(User user) {
         Subject subject= SecurityUtils.getSubject();
-        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(user.getUserName(),MD5Util.getMD5(user.getPassword()));
+        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(user.getAccountName(),MD5Util.getMD5(user.getPassword()));
         try {
             subject.login(usernamePasswordToken);
             subject.checkRoles();
