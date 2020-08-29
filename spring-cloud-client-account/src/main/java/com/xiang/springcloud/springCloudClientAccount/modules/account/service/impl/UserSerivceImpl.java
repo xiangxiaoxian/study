@@ -3,13 +3,17 @@ package com.xiang.springcloud.springCloudClientAccount.modules.account.service.i
 import com.github.pagehelper.PageHelper;
 
 import com.github.pagehelper.PageInfo;
+import com.netflix.discovery.converters.Auto;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.xiang.springcloud.springCloudClientAccount.modules.account.dao.UserDao;
 import com.xiang.springcloud.springCloudClientAccount.modules.account.entity.City;
 import com.xiang.springcloud.springCloudClientAccount.modules.account.entity.User;
+import com.xiang.springcloud.springCloudClientAccount.modules.account.service.TestFeignClient;
 import com.xiang.springcloud.springCloudClientAccount.modules.account.service.UserSerivce;
 import com.xiang.springcloud.springCloudClientAccount.modules.common.vo.Result;
 import com.xiang.springcloud.springCloudClientAccount.modules.common.vo.SearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +41,9 @@ public class UserSerivceImpl implements UserSerivce {
 
    @Autowired
    private RestTemplate restTemplate;
+
+    @Autowired
+   private TestFeignClient  testFeignClient;
 
 
     @Override
@@ -118,7 +126,8 @@ public class UserSerivceImpl implements UserSerivce {
     @Override
     public User selectUserByUserId(int userId) {
         User user=userDao.selectUserByUserId(userId);
-        List<City> cities=Optional.ofNullable(restTemplate.getForObject("http://CLIENT-TEST/city/cities/{countryId}",List.class,522)).orElse(Collections.emptyList());
+        //List<City> cities=Optional.ofNullable(restTemplate.getForObject("http://CLIENT-TEST/city/cities/{countryId}",List.class,522)).orElse(Collections.emptyList());
+        List<City> cities=testFeignClient.selectCitiesByCountryId(522);
         user.setCities(cities);
         return user;
     }
@@ -182,4 +191,6 @@ public class UserSerivceImpl implements UserSerivce {
         Session session = subject.getSession();
         session.setAttribute("user",null);
     }*/
+
+
 }
