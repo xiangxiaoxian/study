@@ -126,6 +126,9 @@ public class UserSerivceImpl implements UserSerivce {
     @Override
     public User selectUserByUserId(int userId) {
         User user=userDao.selectUserByUserId(userId);
+        if (user == null ){
+            return null;
+        }
         //List<City> cities=Optional.ofNullable(restTemplate.getForObject("http://CLIENT-TEST/city/cities/{countryId}",List.class,522)).orElse(Collections.emptyList());
         List<City> cities=testFeignClient.selectCitiesByCountryId(522);
         user.setCities(cities);
