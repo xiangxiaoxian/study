@@ -27,3 +27,21 @@ def commit_(conn):
 def close_connect_cursor(cur, conn):
     cur.close()
     conn.close()
+
+
+def execute(sql):
+    conn, cursor = get_connect_cursor()
+    result = None
+    if sql.startswith("select"):
+        result = execute_query(cursor,sql)
+        close_connect_cursor(conn,cursor)
+    else:
+        result = execute_insert_update_delete(cursor,sql)
+        commit_(conn)
+        close_connect_cursor(conn,cursor)
+    return result
+
+
+if __name__ == '__main__':
+    # print(execute('select * from user'))
+    pass
