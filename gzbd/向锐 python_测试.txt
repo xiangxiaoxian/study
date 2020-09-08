@@ -1,0 +1,120 @@
+一，选择题
+	以下哪个不是python解释器(D)
+		CPython
+		IPython
+		JPython
+		py
+	下列哪个表达式在Python中是非法的？(B)
+		x = y = z = 1
+		x = (y = z + 1)
+		x, y = y, x
+		x += y
+	print("%d %% %d"%(3, 5)) 输出结果是？(A)
+		3 % 5
+		3 %% 5
+		2
+		1
+	“今年第一季度GDP提高了x%”，x为float值，格式化字符串，x保留两位小数，下面哪个是正确的？(C)
+		print("今年第一季度GDP提高了%.2f"%(22.234,))
+		print("今年第一季度GDP提高了%.2f%"%(22.234,))
+		print("今年第一季度GDP提高了%.2f%%"%(22.234,))
+		print("今年第一季度GDP提高了{0}%".format(22.234))
+	l = ["cdsa", 32, 33.2, None, True];l.pop();print(l);打印结果是：(D)
+		["cdsa", 32, 33.2, True]
+		["cdsa", 32, None, True]
+		["cdsa", 32, 33.2, None]
+		[32, 33.2, None, True]
+	print(15 // 2);(B)
+		1
+		7
+		7.5
+		8
+	下面哪个不是 python 的数据类型(D)
+		int
+		str
+		set
+		double
+	*args 代表什么参数(A)
+		位置参数
+		可变参数
+		可变关键字参数
+		命名关键字参数
+	函数多个返回值，实际上返回的是什么数据类型？(C)
+		list
+		set
+		tuple
+		dict
+	安装Django2.0.7版本，使用的什么命令？(C)
+		pip install django
+		pip install django=2.0.7
+		pip install django==2.0.7
+		pip install django version=2.0.7
+
+二、填空题
+	字符串前面添加u、r、b分别代表什么？
+
+	答：加u：代表unicode字符串，对字符串进行unicode编码
+	       加r：代表非转义的字符串
+	       加b：代边byte
+
+	requests模块请求远程服务器，如何设置相应编码？
+	
+	答： requests.get("网址", params={'ie': '编码格式', 'word': 'python'}, timeout=超时时间)
+
+	windows下执行python的方式；
+
+	答：交互模式执行：cmd -----python --------输入一行代码执行一行
+	      文件模式执行：创建.py文件，写代码，cmd 进行文件位置， python 文件名
+
+	创建python package，会自动生成什么文件？
+
+	答：__init__.py
+
+	python变量作用域有哪些？
+	
+	答：L---局部作用域，G----全局作用域，E---闭包函数外的函数，B----内建作用域
+
+三、问答题
+	python命名规则？
+
+	答：字母、数字、下划线，但是数字不能做为开头；
+	      不能是 Python 关键字，但可以包含关键字；
+                      常量：全大写，用下划线连接单词，MAX_OVERFLOW = 3.22222222； ---- MAX_OVERFLOW依旧是一个变量，
+	                Python 没有任何机制保证CONTENT 不会改变，全大写只是大家约定俗成表示常量而已；
+                      全局变量：__xxx，双下划线开头，若想在函数内部对外部变量进行操作，需要在内部声明为global，例如：global __pool;
+                      私有变量：_xxx，不能用'from module import *'导入；
+                      系统自带：__xxx__；
+
+	set删除操作中，pop、remove的区别？
+           
+                 答：pop：删除第一个元素，不匹配
+                       remove：删除首个符合条件的元素 例如 remove(2)
+
+	list使用+=和append函数的区别？
+
+	答：append:将append的整体作为一个元素纳入前面集合
+                      +=:将后面集合的元素添加到前面集合
+
+	使用bs4解析响应内容，获取某div（class为aaa）下所有span节点；
+
+	答：span_all = soup.find(name="div", attrs={"class":"aaa"}).find_all(name='span')
+
+	简述Django操作流程、组件的作用；
+
+	答：操作流程：用户通过浏览器向我们的服务器发起一个请求（request），这个请求会去访问视图函数，
+	                       如果不涉及到数据调用，那么视图函数直接返回一个模板（页面）给用户，反之，视图函数调用模型
+	     	        进行数据处理，并填充到模版中返回给用户
+   	      组件的作用：
+
+四、编程题
+	定义一个函数，接受 0 个或多个参数，返回累计乘积；
+
+	答：def cal(*number):
+    		sum = 1;
+   		for i in number:
+        		      sum *= i;
+    		return sum;
+
+	定义一个函数，去掉字符串前后的空格；
+
+	答：
